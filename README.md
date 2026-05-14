@@ -37,7 +37,7 @@ Pastikan koneksi kabel sesuai dengan tabel di bawah ini sebelum melakukan *uploa
 1. **Clone Repository:**
    ```bash
    git clone [https://github.com/Han0953/Arduino-Industrial-Safety-System.git](https://github.com/Han0953/Arduino-Industrial-Safety-System.git)
-2. Buka IDE: Buka file Safety_System.ino menggunakan Arduino IDE.
+2. Buka IDE: Buka file Sytem_Temperature_Ultrasonic.ino menggunakan Arduino IDE.
 3. Install Library Dependencies: Pastikan library berikut sudah terinstal di Library Manager:
    - DHT sensor library by Adafruit
    - LiquidCrystal I2C by Frank de Brabander
