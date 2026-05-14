@@ -37,3 +37,9 @@ Pastikan koneksi kabel sesuai dengan tabel di bawah ini sebelum melakukan *uploa
 1. **Clone Repository:**
    ```bash
    git clone [https://github.com/Han0953/Arduino-Industrial-Safety-System.git](https://github.com/Han0953/Arduino-Industrial-Safety-System.git)
+2. Buka IDE: Buka file Safety_System.ino menggunakan Arduino IDE.
+3. Install Library Dependencies: Pastikan library berikut sudah terinstal di Library Manager:
+   - DHT sensor library by Adafruit
+   - LiquidCrystal I2C by Frank de Brabander
+4. Konfigurasi Board: Pilih Tools > Board > Arduino Nano. (Catatan: Jika upload error, coba ganti Processor ke ATmega328P (Old Bootloader)).
+5. Upload: Pilih Port yang sesuai dan klik Upload.
