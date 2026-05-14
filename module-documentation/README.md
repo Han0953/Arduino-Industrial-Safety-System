@@ -17,22 +17,29 @@
 * Mengimplementasikan logika interupsi manual menggunakan tombol Emergency Stop bersistem toggle.
 
 ## ⚙️ Spesifikasi Perangkat Keras
-* **Arduino Nano**: ATmega328P, 5V Operating Voltage. Mikrokontroler pemroses data dan pusat kendali logika sistem[cite: 96].
-* **Sensor DHT11**: Range: 0-50°C, Akurasi: ±2°C. Membaca suhu lingkungan untuk mendeteksi indikasi overheat[cite: 96].
-* **Sensor HC-SR04**: Range: 2cm - 400cm, Akurasi: 3mm. [cite_start]Memancarkan gelombang ultrasonik untuk mendeteksi jarak objek[cite: 96].
-* **Modul LCD 16x2 I2C**: 16 Kolom, 2 Baris, Alamat I2C: 0x27[cite: 96]. [cite_start]Antarmuka visual untuk menampilkan data parameter dan status alat[cite: 96].
-* **Push Button**: Taktil mekanis, 4 Pin[cite: 96]. [cite_start]Bertindak sebagai saklar digital (Emergency Stop & Resume)[cite: 96].
-* **Buzzer Pasif**: Membutuhkan sinyal PWM / tone()[cite: 96]. [cite_start]Aktuator audio untuk memberikan peringatan suara[cite: 96].
-* **LED (Merah & Hijau)**: 5mm, Tegangan operasional 2V-3V[cite: 96]. [cite_start]Indikator visual status keamanan sistem (Aman/Peringatan)[cite: 96].
-* **Komponen Pendukung**: Rangkaian juga membutuhkan Resistor 220 Ohm, Breadboard, Kabel Jumper (Male-to-Male & Male-to-Female), dan Kabel USB tipe Mini-USB[cite: 96].
+| Nama Komponen | Spesifikasi Singkat | Fungsi Utama |
+| :--- | :--- | :--- |
+| **Arduino Nano** | ATmega328P, 5V Operating Voltage | Mikrokontroler pemroses data dan pusat kendali logika sistem. |
+| **Sensor DHT11** | Range: 0-50°C, Akurasi: ±2°C | Membaca suhu lingkungan untuk mendeteksi indikasi *overheat*. |
+| **Sensor HC-SR04** | Range: 2cm - 400cm, Akurasi: 3mm | Memancarkan gelombang ultrasonik untuk mendeteksi jarak objek. |
+| **Modul LCD 16x2**| 16 Kolom, 2 Baris, Alamat I2C: 0x27 | Antarmuka visual untuk menampilkan data parameter dan status alat. |
+| **Push Button** | Taktil mekanis, 4 Pin | Bertindak sebagai saklar digital (*Emergency Stop & Resume*). |
+| **Buzzer Pasif** | Membutuhkan sinyal PWM / `tone()` | Aktuator audio untuk memberikan peringatan suara. |
+| **LED Indikator** | Merah & Hijau (5mm, 2V-3V) | Indikator visual status keamanan sistem (Aman/Peringatan). |
+| **Pendukung** | Resistor 220Ω, Kabel Jumper, MB-102 | Komponen pasif dan konektivitas untuk merakit *prototype* di *breadboard*. |
 
 ## 🚨 Skenario Cara Kerja Alat
-* [cite_start]Dalam pengoperasiannya, sistem ini bekerja melalui siklus pembacaan data sensor secara terus-menerus[cite: 81].
-* [cite_start]**Mode Aman (Normal):** Pada kondisi ideal di mana suhu di bawah 33°C dan tidak ada objek dalam radius kurang dari 10 cm, LED Hijau akan menyala aktif sebagai penanda status aman, sementara LCD menampilkan data suhu dan jarak[cite: 82].
-* [cite_start]**Mode Peringatan (Warning):** Apabila sensor ultrasonik mendeteksi keberadaan objek pada jarak ≤ 10 cm, sistem otomatis beralih ke mode peringatan (jarak dekat) yang ditandai dengan LED Merah berkedip dan buzzer berbunyi terputus-putus[cite: 83].
-* [cite_start]**Mode Bahaya (Danger):** Jika sensor DHT11 mendeteksi suhu mencapai ≥ 33°C, mode bahaya (overheat) diaktifkan dengan indikasi LED Merah menyala statis dan buzzer berbunyi panjang secara konstan[cite: 84].
-* [cite_start]**Mode Interupsi (Halted):** Terlepas dari kondisi sensor, operator kapan saja dapat menekan tombol Emergency untuk membekukan seluruh operasi sistem (halted), lalu menekannya kembali untuk mereset dan melanjutkan pemantauan (resume)[cite: 85].
+Sistem beroperasi melalui siklus iteratif dengan 4 skenario *state-machine* utama berdasarkan input sensor dan intervensi operator:
+
+| 🛠️ Mode Operasi | 🌡️/📏 Kondisi Pemicu | 🟢/🔴 Respons Visual (LED & LCD) | 🔊 Respons Audio | ⚙️ Status Sistem |
+| :--- | :--- | :--- | :--- | :--- |
+| 🟢 **Aman (Normal)** | Suhu < 33°C **DAN** Jarak > 10 cm | **LED Hijau ON** <br> LCD: Menampilkan Data Aktual | 🔇 Senyap | Memantau kontinu |
+| 🟠 **Peringatan (Warning)**| Jarak Objek <= 10 cm | **LED Merah KEDIP** <br> LCD: "AWAS! Area Dekat" | 🎵 Beep Terputus | Intervensi Jarak |
+| 🔴 **Bahaya (Overheat)** | Suhu Lingkungan >= 33°C | **LED Merah ON** <br> LCD: "BAHAYA! Overheat" | 🔊 Alarm Konstan | Kondisi Kritis! |
+| ⏸️ **Interupsi (Halted)** | Tombol *E-Stop* Ditekan 1x | **LED Merah ON** <br> LCD: "SYSTEM HALTED!" | 🔇 Senyap | Sistem Dibekukan |
+
+> **Catatan Tambahan:** Pada mode **Interupsi (Halted)**, operator harus menekan tombol *E-Stop* sekali lagi untuk mereset fungsi dan melanjutkan pemantauan (*resume*).
 
 ## 💡 Kesimpulan
-* [cite_start]Prototipe Safety System berbasis Arduino Nano telah sukses diimplementasikan dan diuji[cite: 237].
-* [cite_start]Sistem mampu mengintegrasikan tiga bentuk input (suhu, jarak, mekanik) menjadi tiga intervensi keamanan operasional (visual, audio, dan antarmuka teks) yang reliabel, menjadikannya model yang ideal untuk dikembangkan ke skala Industrial Internet of Things (IIoT)[cite: 238].
+* Prototipe Safety System berbasis Arduino Nano telah sukses diimplementasikan dan diuji.
+* Sistem mampu mengintegrasikan tiga bentuk input (suhu, jarak, mekanik) menjadi tiga intervensi keamanan operasional (visual, audio, dan antarmuka teks) yang reliabel, menjadikannya model yang ideal untuk dikembangkan ke skala Industrial Internet of Things (IIoT).
