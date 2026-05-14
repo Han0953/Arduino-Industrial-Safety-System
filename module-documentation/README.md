@@ -11,20 +11,20 @@
 * Sebagai lapis keamanan tambahan, sistem juga menyertakan tombol mekanis (Push Button) yang difungsikan sebagai saklar Emergency Stop bersistem toggle untuk kontrol interupsi manual dari operator.
 
 ## 🎯 Tujuan Project
-* [cite_start]Memahami prinsip kerja dan integrasi multi-sensor (suhu dan jarak) pada mikrokontroler Arduino[cite: 87].
-* [cite_start]Mengontrol multi-aktuator (LCD, LED, Buzzer) sebagai antarmuka peringatan visual dan audio[cite: 88].
-* [cite_start]Mengembangkan sistem deteksi bahaya industri (peringatan jarak dan suhu berlebih) secara otomatis[cite: 89].
-* [cite_start]Mengimplementasikan logika interupsi manual menggunakan tombol Emergency Stop bersistem toggle[cite: 90].
+* Memahami prinsip kerja dan integrasi multi-sensor (suhu dan jarak) pada mikrokontroler Arduino.
+* Mengontrol multi-aktuator (LCD, LED, Buzzer) sebagai antarmuka peringatan visual dan audio.
+* Mengembangkan sistem deteksi bahaya industri (peringatan jarak dan suhu berlebih) secara otomatis.
+* Mengimplementasikan logika interupsi manual menggunakan tombol Emergency Stop bersistem toggle.
 
 ## ⚙️ Spesifikasi Perangkat Keras
-* [cite_start]**Arduino Nano**: ATmega328P, 5V Operating Voltage[cite: 96]. [cite_start]Mikrokontroler pemroses data dan pusat kendali logika sistem[cite: 96].
-* [cite_start]**Sensor DHT11**: Range: 0-50°C, Akurasi: ±2°C[cite: 96]. [cite_start]Membaca suhu lingkungan untuk mendeteksi indikasi overheat[cite: 96].
-* [cite_start]**Sensor HC-SR04**: Range: 2cm - 400cm, Akurasi: 3mm[cite: 96]. [cite_start]Memancarkan gelombang ultrasonik untuk mendeteksi jarak objek[cite: 96].
-* [cite_start]**Modul LCD 16x2 I2C**: 16 Kolom, 2 Baris, Alamat I2C: 0x27[cite: 96]. [cite_start]Antarmuka visual untuk menampilkan data parameter dan status alat[cite: 96].
-* [cite_start]**Push Button**: Taktil mekanis, 4 Pin[cite: 96]. [cite_start]Bertindak sebagai saklar digital (Emergency Stop & Resume)[cite: 96].
-* [cite_start]**Buzzer Pasif**: Membutuhkan sinyal PWM / tone()[cite: 96]. [cite_start]Aktuator audio untuk memberikan peringatan suara[cite: 96].
-* [cite_start]**LED (Merah & Hijau)**: 5mm, Tegangan operasional 2V-3V[cite: 96]. [cite_start]Indikator visual status keamanan sistem (Aman/Peringatan)[cite: 96].
-* [cite_start]**Komponen Pendukung**: Rangkaian juga membutuhkan Resistor 220 Ohm, Breadboard, Kabel Jumper (Male-to-Male & Male-to-Female), dan Kabel USB tipe Mini-USB[cite: 96].
+* **Arduino Nano**: ATmega328P, 5V Operating Voltage. Mikrokontroler pemroses data dan pusat kendali logika sistem[cite: 96].
+* **Sensor DHT11**: Range: 0-50°C, Akurasi: ±2°C. Membaca suhu lingkungan untuk mendeteksi indikasi overheat[cite: 96].
+* **Sensor HC-SR04**: Range: 2cm - 400cm, Akurasi: 3mm. [cite_start]Memancarkan gelombang ultrasonik untuk mendeteksi jarak objek[cite: 96].
+* **Modul LCD 16x2 I2C**: 16 Kolom, 2 Baris, Alamat I2C: 0x27[cite: 96]. [cite_start]Antarmuka visual untuk menampilkan data parameter dan status alat[cite: 96].
+* **Push Button**: Taktil mekanis, 4 Pin[cite: 96]. [cite_start]Bertindak sebagai saklar digital (Emergency Stop & Resume)[cite: 96].
+* **Buzzer Pasif**: Membutuhkan sinyal PWM / tone()[cite: 96]. [cite_start]Aktuator audio untuk memberikan peringatan suara[cite: 96].
+* **LED (Merah & Hijau)**: 5mm, Tegangan operasional 2V-3V[cite: 96]. [cite_start]Indikator visual status keamanan sistem (Aman/Peringatan)[cite: 96].
+* **Komponen Pendukung**: Rangkaian juga membutuhkan Resistor 220 Ohm, Breadboard, Kabel Jumper (Male-to-Male & Male-to-Female), dan Kabel USB tipe Mini-USB[cite: 96].
 
 ## 🚨 Skenario Cara Kerja Alat
 * [cite_start]Dalam pengoperasiannya, sistem ini bekerja melalui siklus pembacaan data sensor secara terus-menerus[cite: 81].
