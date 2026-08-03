@@ -1,45 +1,120 @@
-# 📄 Ringkasan Modul: Prototipe Safety System Mesin Industri Berbasis Arduino Nano
+# 📄 Project Overview: Arduino Nano-Based Industrial Safety System
 
-## 🏭 Latar Belakang & Deskripsi Sistem
-* Keselamatan kerja di sektor industri menuntut adanya pengawasan yang ketat dan berkelanjutan terhadap kondisi operasional mesin produksi.
-* Anomali seperti peningkatan suhu ekstrem (overheat) maupun pelanggaran batas jarak aman oleh pekerja sering kali menjadi pemicu utama kecelakaan kerja dan kerusakan peralatan fisik.
-* Oleh karena itu, pengembangan sistem otomatisasi pemantauan menjadi solusi yang krusial untuk menggantikan atau membantu pengawasan manual.
-* Sistem ini secara khusus dirancang untuk memitigasi risiko tersebut dengan memberikan respons dan peringatan dini secara real-time berdasarkan fluktuasi kondisi lingkungan di sekitar zona bahaya mesin.
-* Secara arsitektur teknis, prototipe sistem keamanan mesin industri ini dikendalikan oleh mikrokontroler Arduino Nano yang bertindak sebagai pusat pemrosesan logika utama (Central Processing Unit).
-* Sistem ini mengintegrasikan instrumen input berupa sensor suhu DHT11 untuk memantau termal mesin dan sensor ultrasonik HC-SR04 untuk mendeteksi intrusi objek di area operasional.
-* Sebagai antarmuka keluaran (Human Machine Interface), sistem dilengkapi dengan layar LCD 16x2 I2C untuk visualisasi data aktual parameter, indikator LED (Merah dan Hijau) untuk status visual cepat, serta aktuator buzzer pasif sebagai alarm audio.
-* Sebagai lapis keamanan tambahan, sistem juga menyertakan tombol mekanis (Push Button) yang difungsikan sebagai saklar Emergency Stop bersistem toggle untuk kontrol interupsi manual dari operator.
+## 🏭 Background
 
-## 🎯 Tujuan Project
-* Memahami prinsip kerja dan integrasi multi-sensor (suhu dan jarak) pada mikrokontroler Arduino.
-* Mengontrol multi-aktuator (LCD, LED, Buzzer) sebagai antarmuka peringatan visual dan audio.
-* Mengembangkan sistem deteksi bahaya industri (peringatan jarak dan suhu berlebih) secara otomatis.
-* Mengimplementasikan logika interupsi manual menggunakan tombol Emergency Stop bersistem toggle.
+Industrial workplaces require continuous monitoring to ensure safe machine operation and protect workers from potential hazards. Common risks such as machine overheating and accidental entry into hazardous zones can lead to equipment damage, production downtime, and workplace accidents.
 
-## ⚙️ Spesifikasi Perangkat Keras
-| Nama Komponen | Spesifikasi Singkat | Fungsi Utama |
-| :--- | :--- | :--- |
-| **Arduino Nano** | ATmega328P, 5V Operating Voltage | Mikrokontroler pemroses data dan pusat kendali logika sistem. |
-| **Sensor DHT11** | Range: 0-50°C, Akurasi: ±2°C | Membaca suhu lingkungan untuk mendeteksi indikasi *overheat*. |
-| **Sensor HC-SR04** | Range: 2cm - 400cm, Akurasi: 3mm | Memancarkan gelombang ultrasonik untuk mendeteksi jarak objek. |
-| **Modul LCD 16x2**| 16 Kolom, 2 Baris, Alamat I2C: 0x27 | Antarmuka visual untuk menampilkan data parameter dan status alat. |
-| **Push Button** | Taktil mekanis, 4 Pin | Bertindak sebagai saklar digital (*Emergency Stop & Resume*). |
-| **Buzzer Pasif** | Membutuhkan sinyal PWM / `tone()` | Aktuator audio untuk memberikan peringatan suara. |
-| **LED Indikator** | Merah & Hijau (5mm, 2V-3V) | Indikator visual status keamanan sistem (Aman/Peringatan). |
-| **Pendukung** | Resistor 220Ω, Kabel Jumper, MB-102 | Komponen pasif dan konektivitas untuk merakit *prototype* di *breadboard*. |
+To address these challenges, this project presents an **Arduino Nano-Based Industrial Safety System**, a prototype designed to provide **real-time environmental monitoring** and **early hazard detection**. The system continuously observes machine temperature and operator proximity, then immediately responds through visual and audible warning mechanisms whenever unsafe conditions are detected.
 
-## 🚨 Skenario Cara Kerja Alat
-Sistem beroperasi melalui siklus iteratif dengan 4 skenario *state-machine* utama berdasarkan input sensor dan intervensi operator:
+The prototype is built around an **Arduino Nano (ATmega328P)**, which acts as the central processing unit for all monitoring and decision-making tasks.
 
-| 🛠️ Mode Operasi | 🌡️/📏 Kondisi Pemicu | 🟢/🔴 Respons Visual (LED & LCD) | 🔊 Respons Audio | ⚙️ Status Sistem |
-| :--- | :--- | :--- | :--- | :--- |
-| 🟢 **Aman (Normal)** | Suhu < 33°C **DAN** Jarak > 10 cm | **LED Hijau ON** <br> LCD: Menampilkan Data Aktual | 🔇 Senyap | Memantau kontinu |
-| 🟠 **Peringatan (Warning)**| Jarak Objek <= 10 cm | **LED Merah KEDIP** <br> LCD: "AWAS! Area Dekat" | 🎵 Beep Terputus | Intervensi Jarak |
-| 🔴 **Bahaya (Overheat)** | Suhu Lingkungan >= 33°C | **LED Merah ON** <br> LCD: "BAHAYA! Overheat" | 🔊 Alarm Konstan | Kondisi Kritis! |
-| ⏸️ **Interupsi (Halted)** | Tombol *E-Stop* Ditekan 1x | **LED Merah ON** <br> LCD: "SYSTEM HALTED!" | 🔇 Senyap | Sistem Dibekukan |
+The system integrates:
 
-> **Catatan Tambahan:** Pada mode **Interupsi (Halted)**, operator harus menekan tombol *E-Stop* sekali lagi untuk mereset fungsi dan melanjutkan pemantauan (*resume*).
+- 🌡️ **DHT11 Temperature Sensor** for thermal monitoring.
+- 📏 **HC-SR04 Ultrasonic Sensor** for proximity detection.
+- 📟 **16×2 I2C LCD** for real-time system information.
+- 🟢🔴 **LED Indicators** for quick visual status feedback.
+- 🔊 **Passive Buzzer** for audible alarms.
+- 🛑 **Push Button** functioning as a toggle-based Emergency Stop (Manual Override).
 
-## 💡 Kesimpulan
-* Prototipe Safety System berbasis Arduino Nano telah sukses diimplementasikan dan diuji.
-* Sistem mampu mengintegrasikan tiga bentuk input (suhu, jarak, mekanik) menjadi tiga intervensi keamanan operasional (visual, audio, dan antarmuka teks) yang reliabel, menjadikannya model yang ideal untuk dikembangkan ke skala Industrial Internet of Things (IIoT).
+Together, these components create a simple yet effective industrial safety monitoring prototype suitable for educational purposes and future Industrial Internet of Things (IIoT) development.
+
+---
+
+# 🎯 Project Objectives
+
+This project aims to:
+
+- Develop an industrial safety monitoring prototype using Arduino Nano.
+- Integrate multiple sensors for real-time environmental monitoring.
+- Detect abnormal operating conditions such as overheating and unsafe object proximity.
+- Provide visual and audible warning mechanisms to improve operational safety.
+- Implement a toggle-based Emergency Stop (Manual Override) for immediate operator intervention.
+- Demonstrate the integration of sensors, actuators, and Human-Machine Interface (HMI) in an embedded system.
+
+---
+
+# ⚙️ Hardware Specifications
+
+| Component | Specification | Function |
+|------------|---------------|----------|
+| **Arduino Nano** | ATmega328P, 5V Operating Voltage | Main controller and processing unit |
+| **DHT11** | Temperature Range: 0–50°C, Accuracy: ±2°C | Measures ambient temperature for overheating detection |
+| **HC-SR04** | Measuring Range: 2–400 cm, Accuracy: ±3 mm | Detects nearby objects within the hazardous area |
+| **16×2 LCD I2C** | I2C Address: 0x27 | Displays system information and sensor readings |
+| **Push Button** | 4-Pin Tactile Switch | Emergency Stop / Resume control |
+| **Passive Buzzer** | PWM / tone() Compatible | Audible warning indicator |
+| **LED Indicators** | Red & Green LEDs | Visual safety status indication |
+| **Supporting Components** | Breadboard, 220Ω Resistors, Jumper Wires | Circuit assembly and electrical connections |
+
+---
+
+# 🚨 Operating Scenarios
+
+The Industrial Safety System continuously evaluates sensor data and operates in one of four system states.
+
+| Operating Mode | Trigger Condition | Visual Response | Audio Response | System Status |
+|---------------|-------------------|-----------------|---------------|---------------|
+| 🟢 **Normal Mode** | Temperature < **33°C** AND Distance > **10 cm** | Green LED ON, LCD displays live sensor data | Silent | Continuous Monitoring |
+| 🟠 **Warning Mode** | Object detected within **10 cm** | Red LED Blinking, LCD displays **"WARNING! Object Detected"** | Intermittent Beeping | Proximity Warning |
+| 🔴 **Critical Mode** | Temperature ≥ **33°C** | Red LED ON, LCD displays **"DANGER! OVERHEAT"** | Continuous Alarm | Critical Safety Condition |
+| ⏸️ **Emergency Stop** | Emergency Button Pressed | Red LED ON, LCD displays **"SYSTEM HALTED"** | Silent | System Monitoring Paused |
+
+> **Note:** While the system is in **Emergency Stop Mode**, all monitoring functions are suspended. Pressing the Emergency Stop button again resumes normal operation.
+
+---
+
+# 🔄 System Operation
+
+```text
+          System Power On
+                 │
+                 ▼
+      Initialize All Components
+                 │
+                 ▼
+ Read Temperature & Distance Sensors
+                 │
+                 ▼
+    Emergency Stop Activated?
+          │              │
+         Yes            No
+          │              │
+          ▼              ▼
+   Pause Monitoring   Analyze Sensor Data
+                           │
+          ┌────────────────┴────────────────┐
+          ▼                                 ▼
+ Temperature ≥ 33°C?              Distance ≤ 10 cm?
+          │                                 │
+         Yes                               Yes
+          │                                 │
+          ▼                                 ▼
+ Trigger Overheat Alarm         Trigger Proximity Alert
+          │                                 │
+          └───────────────┬─────────────────┘
+                          ▼
+           Update LCD, LEDs & Buzzer
+                          │
+                          ▼
+                   Repeat Continuously
+```
+
+---
+
+# 💡 Conclusion
+
+The **Arduino Nano-Based Industrial Safety System** has been successfully designed, implemented, and tested as a functional industrial safety prototype.
+
+The system effectively combines multiple sensor inputs, including temperature monitoring, proximity detection, and manual emergency control, into an integrated warning system featuring visual indicators, audible alarms, and a user-friendly Human-Machine Interface (HMI).
+
+Although developed as an educational prototype, the architecture provides a solid foundation for future enhancements, such as:
+
+- 🌐 Industrial Internet of Things (IIoT)
+- ☁️ Cloud-based Monitoring
+- 📱 Mobile Notifications
+- 📊 Data Logging & Analytics
+- 🤖 Predictive Maintenance
+- 🧠 Artificial Intelligence-Based Hazard Detection
+
+This project demonstrates how embedded systems can contribute to improving workplace safety while serving as a practical learning platform for industrial automation and smart manufacturing technologies.
