@@ -1,155 +1,189 @@
+<div align="center">
+
 # 🛡️ Industrial Safety System
 
-> **An Arduino Nano-Based Industrial Safety Monitoring and Early Warning System**
+### Arduino Nano-Based Industrial Safety Monitoring & Early Warning System
 
-A smart industrial safety prototype designed to improve workplace safety by continuously monitoring **temperature** and **proximity hazards** in real time. Powered by an **Arduino Nano**, the system integrates multiple sensors and warning mechanisms to provide early detection of unsafe conditions while supporting an **Emergency Stop (Manual Override)** feature for immediate system control.
+<img src="./assets/banner.png" width="100%">
+
+![Arduino](https://img.shields.io/badge/Board-Arduino_Nano-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![Language](https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Arduino_IDE-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+
+*A smart embedded safety prototype for industrial environments capable of monitoring temperature, detecting hazardous proximity, and providing real-time visual and audible warnings.*
+
+</div>
 
 ---
 
-## 📖 Overview
+# 📖 Overview
 
-The Industrial Safety System is capable of detecting abnormal machine temperatures and unsafe object distances around hazardous work areas. When dangerous conditions are detected, the system immediately activates visual and audible alarms to notify operators, helping reduce the risk of accidents in industrial environments.
+The **Industrial Safety System** is an Arduino Nano-based embedded monitoring prototype developed to improve workplace safety through continuous environmental monitoring.
+
+The system simultaneously measures **machine temperature** and **operator proximity** to detect unsafe operating conditions before they become critical.
+
+Whenever abnormal conditions are detected, the system immediately activates multiple warning mechanisms, including LED indicators, a passive buzzer, and a 16×2 LCD display.
+
+An integrated **Emergency Stop (Manual Override)** button allows operators to instantly pause or resume the monitoring process whenever necessary.
 
 ---
 
-# ✨ Key Features
+# ✨ Features
 
-- 🌡️ **Real-Time Temperature Monitoring**
-  - Continuously measures ambient temperature using the DHT11 sensor.
-  - Overheat warning is triggered when the temperature reaches **33°C or above**.
+- 🌡️ Real-Time Temperature Monitoring
+- 📏 Ultrasonic Proximity Detection
+- 🛑 Emergency Stop / Resume
+- 📟 LCD Human-Machine Interface
+- 🔴🟢 Visual LED Status Indicators
+- 🔊 Passive Buzzer Alarm
+- ⚡ Continuous Real-Time Monitoring
+- 🎓 Educational Embedded System Prototype
 
-- 📏 **Proximity Hazard Detection**
-  - Detects nearby objects or operator hands using the HC-SR04 ultrasonic sensor.
-  - Safety alert activates when an object is detected within **10 cm**.
+---
 
-- 🛑 **Emergency Stop (Manual Override)**
-  - Instantly pauses all monitoring activities using a single push button.
-  - Allows the operator to safely resume system operation when required.
+# 🎯 Objectives
 
-- 📟 **Human Machine Interface (HMI)**
-  - Displays real-time temperature, distance, and system status on a **16×2 I2C LCD**.
-  - Uses dedicated LED indicators for quick visual feedback.
-
-- 🔊 **Audible Warning System**
-  - Passive buzzer generates intermittent and continuous alarm patterns depending on the detected hazard.
+- Integrate multiple sensors into a single embedded monitoring system.
+- Detect machine overheating in real time.
+- Detect unsafe object proximity around hazardous areas.
+- Provide visual and audible warning mechanisms.
+- Implement manual Emergency Stop functionality.
+- Demonstrate embedded programming using Arduino Nano.
 
 ---
 
 # 🛠 Hardware Components
 
-| Component | Specification |
-|------------|---------------|
-| Microcontroller | Arduino Nano (ATmega328P) |
-| Temperature Sensor | DHT11 |
-| Distance Sensor | HC-SR04 Ultrasonic |
-| Display | 16×2 LCD with I2C Module (0x27) |
-| Audio Output | Passive Buzzer |
-| Visual Indicators | Red LED, Green LED, 220Ω Resistors |
-| User Input | Push Button (Emergency Stop) |
+| Component | Specification | Function |
+|------------|---------------|----------|
+| Arduino Nano | ATmega328P | Main Controller |
+| DHT11 | Temperature Sensor | Thermal Monitoring |
+| HC-SR04 | Ultrasonic Sensor | Distance Detection |
+| LCD 16×2 | I2C (0x27) | Human Machine Interface |
+| Passive Buzzer | PWM Compatible | Audible Warning |
+| Red LED | 5mm | Danger Indicator |
+| Green LED | 5mm | Safe Indicator |
+| Push Button | Tactile Switch | Emergency Stop |
 
 ---
 
 # 🔌 Pin Configuration
 
-Ensure all hardware connections match the following table before uploading the firmware.
-
-| Component | Arduino Pin |
-|------------|-------------|
-| DHT11 Data | D2 |
+| Component | Pin |
+|------------|-----|
+| DHT11 | D2 |
 | HC-SR04 Trigger | D3 |
 | HC-SR04 Echo | D4 |
 | Push Button | D5 |
 | Red LED | D6 |
 | Green LED | D7 |
 | Passive Buzzer | D8 |
-| LCD I2C SDA | A4 |
-| LCD I2C SCL | A5 |
+| LCD SDA | A4 |
+| LCD SCL | A5 |
 
 ---
 
-# ⚙️ System Workflow
+# ⚙️ Operating Modes
+
+| Mode | Trigger | LED | LCD | Buzzer |
+|------|---------|-----|-----|---------|
+| 🟢 Safe | Temp < 33°C & Distance > 10 cm | Green | Live Sensor Data | Silent |
+| 🟠 Warning | Distance ≤ 10 cm | Blinking Red | WARNING | Beep |
+| 🔴 Danger | Temp ≥ 33°C | Solid Red | OVERHEAT | Continuous Alarm |
+| ⏸ Halted | Emergency Stop | Red | SYSTEM HALTED | Silent |
+
+---
+
+# 🔄 System Workflow
 
 ```text
-                Start
-                  │
-                  ▼
-        Initialize Hardware
-                  │
-                  ▼
- Read Temperature & Distance Sensors
-                  │
-                  ▼
-      Is Emergency Stop Active?
-           │              │
-          Yes            No
-           │              │
-           ▼              ▼
-     Pause System   Evaluate Sensor Data
-                          │
-          ┌───────────────┴───────────────┐
-          ▼                               ▼
- Temperature ≥ 33°C?             Distance ≤ 10 cm?
-          │                               │
-         Yes                             Yes
-          │                               │
-          ▼                               ▼
- Activate Alarm                 Activate Alarm
-          │                               │
-          └───────────────┬───────────────┘
-                          ▼
-              Update LCD & LED Status
-                          │
-                          ▼
-                    Repeat Forever
+                 Power ON
+                     │
+                     ▼
+          Initialize Hardware
+                     │
+                     ▼
+      Read Temperature & Distance
+                     │
+                     ▼
+      Emergency Stop Activated?
+              │           │
+             Yes         No
+              │           │
+              ▼           ▼
+       Pause Monitoring   Analyze Sensor Data
+                              │
+            ┌─────────────────┴─────────────────┐
+            ▼                                   ▼
+   Temperature ≥ 33°C?                 Distance ≤ 10 cm?
+            │                                   │
+           Yes                                 Yes
+            │                                   │
+            ▼                                   ▼
+      Trigger Alarm                    Trigger Warning
+            │                                   │
+            └─────────────────┬─────────────────┘
+                              ▼
+               Update LCD, LEDs & Buzzer
+                              │
+                              ▼
+                     Repeat Continuously
 ```
 
 ---
 
-# 🚀 Installation Guide
+# 📊 System Architecture
 
-## 1. Clone the Repository
+```text
+               DHT11
+                  │
+                  │
+             HC-SR04
+                  │
+                  ▼
+          Arduino Nano
+        ┌──────┼──────┐
+        ▼      ▼      ▼
+      LCD     LEDs  Buzzer
+                 │
+                 ▼
+          Emergency Button
+```
+
+---
+
+# 🚀 Installation
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/Han0953/Arduino-Industrial-Safety-System.git
 ```
 
----
-
-## 2. Open the Project
-
-Launch **Arduino IDE**, then open:
+## Open Project
 
 ```text
 System_Temperature_Ultrasonic.ino
 ```
 
----
+## Required Libraries
 
-## 3. Install Required Libraries
+| Library |
+|----------|
+| DHT Sensor Library |
+| Adafruit Unified Sensor |
+| LiquidCrystal_I2C |
 
-Open **Arduino IDE → Library Manager** (`Ctrl + Shift + I`) and install:
-
-| Library | Author |
-|----------|--------|
-| DHT Sensor Library | Adafruit |
-| Adafruit Unified Sensor | Adafruit |
-| LiquidCrystal I2C | Frank de Brabander |
-
----
-
-## 4. Configure Arduino IDE
+## Arduino IDE Configuration
 
 | Setting | Value |
 |----------|-------|
 | Board | Arduino Nano |
-| Processor | ATmega328P *(Use Old Bootloader if necessary)* |
-| Port | Select your Arduino COM Port |
+| Processor | ATmega328P (Old Bootloader if needed) |
+| Port | Your Arduino COM Port |
 
----
-
-## 5. Upload the Firmware
-
-Connect your Arduino Nano via USB, select the correct COM port, and click **Upload**.
+Click **Upload** after compilation.
 
 ---
 
@@ -158,56 +192,75 @@ Connect your Arduino Nano via USB, select the correct COM port, and click **Uplo
 ```text
 📦 Arduino-Industrial-Safety-System
 │
-├── 📄 System_Temperature_Ultrasonic.ino
-│   └── Main Arduino Firmware
-│
-├── 📁 hardware
-│   ├── 🖼 circuit_schematic.png
-│   ├── 🖼 wiring_diagram.png
-│   └── 🖼 prototype_photo.jpg
-│
-├── 📁 images
-│   ├── lcd_display.png
-│   ├── temperature_alarm.png
-│   └── proximity_alarm.png
-│
+├── 📄 README.md
 ├── 📄 LICENSE
-└── 📄 README.md
+├── 📄 System_Temperature_Ultrasonic.ino
+│
+├── 📁 assets
+│   ├── banner.png
+│   ├── prototype.jpg
+│   ├── wiring_diagram.png
+│   ├── circuit_schematic.png
+│   ├── block_diagram.png
+│   └── demo.gif
+│
+└── 📁 images
+    ├── lcd_display.jpg
+    ├── temperature_alarm.jpg
+    └── warning_mode.jpg
 ```
 
 ---
 
-# 📸 Demonstration
+# 📸 Preview
 
-| Normal Operation | Temperature Alert | Distance Alert |
-|------------------|-------------------|----------------|
-| *(Add Image)* | *(Add Image)* | *(Add Image)* |
+| Prototype | Wiring Diagram |
+|------------|----------------|
+| *(Add Image)* | *(Add Image)* |
+
+| Safe Mode | Warning Mode | Danger Mode |
+|------------|--------------|-------------|
+| *(Image)* | *(Image)* | *(Image)* |
 
 ---
 
-# 🎯 Applications
+# 🌍 Applications
 
 - Industrial Safety Monitoring
-- Machine Overheat Detection
-- Operator Safety Protection
-- Factory Automation
-- Engineering Education
-- Embedded Systems Learning
+- Smart Factory
+- Machine Protection
+- Engineering Laboratory
+- Embedded Systems Education
+- Industrial Automation
+
+---
+
+# 🚀 Future Improvements
+
+- 📡 ESP32 Wi-Fi Version
+- ☁ MQTT Cloud Dashboard
+- 📱 Mobile Notifications
+- 📊 Data Logging
+- 🌡 Temperature History
+- 🤖 AI-Based Predictive Maintenance
+- 📈 Web Dashboard
 
 ---
 
 # 📜 License
 
-This project was developed for educational, research, and demonstration purposes.
+Released under the **MIT License**.
 
-You are welcome to use, modify, and improve this project with proper attribution.
+Feel free to use, modify, and improve this project with proper attribution.
 
 ---
 
 <div align="center">
 
-### ⭐ If you find this project useful, consider giving it a Star!
+### ⭐ If this project helped you, consider giving it a Star!
 
 **Designed & Developed by Rehan**
+
+*Electronics • Embedded Systems • Arduino • IoT • Industrial Automation*
 
 </div>
